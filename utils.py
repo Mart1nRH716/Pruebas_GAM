@@ -1,8 +1,8 @@
 import pyodbc
+import pandas as pd
 # ============= CONEXIÓN A BASE DE DATOS =============
 # Configuración con PyODBC
 server = 'MTO02438WSAGC01'
-database = 'Dengue'
 username = 'sa'
 password = 'Im550123'
 driver = 'ODBC Driver 11 for SQL Server'
@@ -11,7 +11,7 @@ driver = 'ODBC Driver 11 for SQL Server'
 '''
 Función para obtener los datos de cualquier tabla de sql SERVER
 '''
-def obtener_datos(nombre_tabla):
+def obtener_datos(database, nombre_tabla ):
 	# Configuración de conexión a la base de datos
 	connection_string = (
 		f'DRIVER={driver};'
@@ -25,6 +25,10 @@ def obtener_datos(nombre_tabla):
 	cursor = conn.cursor()
 	query = f'SELECT * FROM {nombre_tabla}'
 	cursor.execute(query)
-	dengue_data = cursor.fetchall()
+	data = cursor.fetchall()
+	data = pd.DataFrame.from_records(data, columns=[column[0] for column in cursor.description])
 
-	return dengue_data
+	return data
+
+df = obtener_datos('Prueba', 'Grades')
+print(df)

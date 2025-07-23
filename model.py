@@ -1,8 +1,10 @@
 from prophet import Prophet
 import pandas as pd
+from utils import obtener_datos
+
 # Inicializamos el modelo Prophet
 m = Prophet()
-df_train = pd.read_csv('train.csv')
+df_train = obtener_datos('Prueba', 'Grades')
 
 # Añadimos regresores al modelo
 m.add_regressor('temperature')
